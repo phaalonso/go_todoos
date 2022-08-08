@@ -1,28 +1,71 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
+	"bufio"
 	"fmt"
+	"log"
+	"os"
+	"strconv"
+	"strings"
 
+	"github.com/phaalonso/todoos/todo"
 	"github.com/spf13/cobra"
 )
 
 // delCmd represents the del command
 var delCmd = &cobra.Command{
 	Use:   "del",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Delete an specific task item",
+	Long:  `Use this command to list, and select an specif task item to be removed from your tasks`,
+	Run:   deleteTask,
+}
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("del called")
-	},
+func deleteTask(cmd *cobra.Command, args []string) {
+	items, err := todo.ReadItems("todoos.json")
+	reader := bufio.NewReader(os.Stdin)
+
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	todo.ListItems(items)
+
+	fmt.Println("Select one or more options to mark as done (separate with ',')")
+	fmt.Print("-> ")
+
+	text, err := reader.ReadString('\n')
+
+	if len(text) == 0 || err != nil {
+		return
+	}
+
+	values := strings.Split(text, ",")
+
+	for _, x := range values {
+		x = strings.TrimSpace(x)
+
+		num, err := strconv.Atoi(x)
+
+		if err != nil {
+			log.Printf("%v", err)
+			continue
+		}
+
+		if num <= 0 {
+			log.Println("Reveiced number that is equals or lower than zero, proceding to ignore it")
+			continue
+		}
+
+		num -= 1
+
+		copy(items[num:], items[num+1:])
+		items = items[:len(items)-1]
+	}
+
+	todo.SaveItems("todoos.json", items)
 }
 
 func init() {

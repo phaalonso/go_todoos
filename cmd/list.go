@@ -1,12 +1,10 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"os"
 
@@ -33,9 +31,7 @@ func listTodoos(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	for i, x := range items {
-		fmt.Println(i+1, x.Text)
-	}
+	todo.ListItems(items)
 }
 
 func init() {

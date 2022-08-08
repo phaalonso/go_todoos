@@ -2,6 +2,7 @@ package todo
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 )
 
@@ -42,4 +43,14 @@ func ReadItems(fileName string) ([]Item, error) {
 	}
 
 	return items, nil
+}
+
+func ListItems(items []Item) {
+	for i, x := range items {
+		checked := " "
+		if x.Done {
+			checked = "✓"
+		}
+		fmt.Printf("%s %d - %s\n", checked, i+1, x.Text)
+	}
 }

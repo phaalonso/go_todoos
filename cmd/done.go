@@ -37,13 +37,7 @@ func markAsDone(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	for i, x := range items {
-		checked := " "
-		if x.Done {
-			checked = "✓"
-		}
-		fmt.Printf("%s %d - %s\n", checked, i+1, x.Text)
-	}
+	todo.ListItems(items)
 
 	fmt.Println("Select one or more options to mark as done (separate with ',')")
 	fmt.Print("-> ")
@@ -71,7 +65,9 @@ func markAsDone(cmd *cobra.Command, args []string) {
 			continue
 		}
 
-		items[num-1].Done = !items[num-1].Done
+		num -= 1
+
+		items[num].Done = !items[num].Done
 	}
 
 	todo.SaveItems("todoos.json", items)

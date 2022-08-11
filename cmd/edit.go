@@ -4,8 +4,14 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"bufio"
 	"fmt"
+	"log"
+	"os"
+	"strconv"
+	"strings"
 
+	"github.com/phaalonso/todoos/todo"
 	"github.com/spf13/cobra"
 )
 
@@ -18,7 +24,40 @@ var editCmd = &cobra.Command{
 }
 
 func editTask(cmd *cobra.Command, args []string) {
-	fmt.Println("edit called")
+	items, err := todo.ReadItems("todoos.json")
+	reader := bufio.NewReader(os.Stdin)
+
+	if err != nil {
+		log.Printf("%v", err)
+	}
+
+	todo.ListItems(items)
+
+	text, err := reader.ReadString('\n')
+
+	if len(text) == 0 || err != nil {
+		return
+	}
+
+	fmt.Println("Digite o novo conteudo da tarefa:")
+	fmt.Print("-> ")
+
+	num, err := strconv.Atoi(strings.TrimSpace(text))
+
+	if num <= 0 {
+		log.Printf("Number received is lower or equals than zero, proceding to ignore it")
+		return
+	}
+
+	text, err = reader.ReadString('\n')
+
+	if err != nil {
+		log.Fatal("Error reading from stding")
+	}
+
+	items[num-1].Text = strings.TrimSpace(text)
+
+	todo.SaveItems("todoos.json", items)
 }
 
 func init() {

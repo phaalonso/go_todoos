@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
@@ -25,8 +24,6 @@ func addRun(cmd *cobra.Command, args []string) {
 	for _, x := range args {
 		items = append(items, todo.Item{Text: x})
 	}
-
-	// fmt.Printf("%#v\n", items)
 
 	err = todo.SaveItems("todoos.json", items)
 

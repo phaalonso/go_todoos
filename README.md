@@ -16,5 +16,5 @@ This is my first app created with Go Lang.
 - [x] Save tasks to json file
 - [x] Mark tasks item as done
 - [x] Delete specifc task item
-- [ ] Edit specific task item
+- [x] Edit specific task item
 - [ ] Save task items priority

@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -18,19 +19,20 @@ import (
 
 // doneCmd represents the done command
 var doneCmd = &cobra.Command{
-	Use:   "done",
-	Short: "Mark an task as done",
-	Long:  `Select one or more task's to mark it as done`,
-	Run:   markAsDone,
+	Use:     "done",
+	Aliases: []string{"do"},
+	Short:   "Mark an task as done",
+	Long:    `Select one or more task's to mark it as done`,
+	Run:     markAsDone,
 }
 
 func markAsDone(cmd *cobra.Command, args []string) {
 	reader := bufio.NewReader(os.Stdin)
-	items, err := todo.ReadItems("todoos.json")
+	items, err := todo.ReadItems(dataFile)
 
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			log.Printf("File %s does not exist", "todoos.json")
+			log.Printf("File %s does not exist", dataFile)
 		} else {
 			log.Printf("%v", err)
 		}
@@ -60,17 +62,17 @@ func markAsDone(cmd *cobra.Command, args []string) {
 			continue
 		}
 
-		if num <= 0 {
-			log.Println("Reveiced number that is equals or lower than zero, proceding to ignore it")
-			continue
+		if num > 0 && num < len(items) {
+			num -= 1
+			items[num].Done = !items[num].Done
+			fmt.Printf("%q %v\n", items[num].Text, "marked as done")
+			sort.Sort(todo.ByPri(items))
+		} else {
+			log.Println(num, "doesn't match any items")
 		}
-
-		num -= 1
-
-		items[num].Done = !items[num].Done
 	}
 
-	todo.SaveItems("todoos.json", items)
+	todo.SaveItems(dataFile, items)
 }
 
 func init() {

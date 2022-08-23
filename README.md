@@ -14,7 +14,13 @@ This is my first app created with Go Lang.
 ## Tasks
 - [x] Add new tasks
 - [x] Save tasks to json file
+    - [x] Save task items priority
+    - [x] Permit user to set a different data path
 - [x] Mark tasks item as done
 - [x] Delete specifc task item
 - [x] Edit specific task item
-- [ ] Save task items priority
+- [x] List task item
+  - [x] List only done or not done task's using an argument `--done`
+  - [x] List all task's using an argument `--all` 
+- [ ] Load configs from a file
+    - [ ] Load configs from enviroment variables

@@ -24,7 +24,7 @@ var editCmd = &cobra.Command{
 }
 
 func editTask(cmd *cobra.Command, args []string) {
-	items, err := todo.ReadItems("todoos.json")
+	items, err := todo.ReadItems(dataFile)
 	reader := bufio.NewReader(os.Stdin)
 
 	if err != nil {
@@ -57,7 +57,7 @@ func editTask(cmd *cobra.Command, args []string) {
 
 	items[num-1].Text = strings.TrimSpace(text)
 
-	todo.SaveItems("todoos.json", items)
+	todo.SaveItems(dataFile, items)
 }
 
 func init() {

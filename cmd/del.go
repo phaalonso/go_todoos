@@ -24,7 +24,7 @@ var delCmd = &cobra.Command{
 }
 
 func deleteTask(cmd *cobra.Command, args []string) {
-	items, err := todo.ReadItems("todoos.json")
+	items, err := todo.ReadItems(dataFile)
 	reader := bufio.NewReader(os.Stdin)
 
 	if err != nil {
@@ -65,7 +65,7 @@ func deleteTask(cmd *cobra.Command, args []string) {
 		items = items[:len(items)-1]
 	}
 
-	todo.SaveItems("todoos.json", items)
+	todo.SaveItems(dataFile, items)
 }
 
 func init() {
